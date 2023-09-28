@@ -1,0 +1,88 @@
+.login {
+    display: flex;
+    height: 70vh;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    flex-direction: column;
+
+    &-modal {
+        backdrop-filter: blur(4px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+            0 2px 4px -2px rgb(0 0 0 / 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 100px;
+        width: 95%;
+        height: 70%;
+        padding: 14px;
+
+        @media screen and (min-width: 576px) {
+            width: 85%;
+        }
+
+        @media screen and (min-width: 768px) {
+            width: 60%;
+        }
+
+        @media screen and (min-width: 992px) {
+            width: 50%;
+        }
+
+        &-inputs {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+
+            &-email {
+                width: 100%;
+                height: 35px;
+            }
+
+            &-password {
+                width: 100%;
+                height: 35px;
+            }
+
+            &-error {
+                height: 20px;
+                align-self: center;
+                font-weight: 500;
+                font-size: larger;
+                color: red;
+            }
+
+            &-loading {
+                height: 50px;
+            }
+        }
+
+        &-btns {
+            display: flex;
+            gap: 10px;
+
+            &-login {
+                width: 50%;
+                height: 35px;
+            }
+
+            &-register {
+                width: 50%;
+                height: 35px;
+            }
+        }
+    }
+
+    &-name {
+        z-index: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 500;
+        width: 100%;
+        font-size: x-large;
+    }
+}

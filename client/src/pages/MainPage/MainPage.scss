@@ -1,0 +1,85 @@
+.main-grid {
+    width: 100%;
+    height: min-content;
+    display: grid;
+    gap: 20px;
+    grid-template-columns: 1fr;
+
+    @media screen and (min-width: 576px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    @media screen and (min-width: 992px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    &-span {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        align-self: center;
+        height: 100px;
+        grid-column: 1 span;
+
+        @media screen and (min-width: 576px) {
+            grid-column: 2 span;
+        }
+
+        @media screen and (min-width: 992px) {
+            grid-column: 3 span;
+        }
+
+        &-search {
+            width: 100%;
+            height: 35px;
+        }
+
+        &-name {
+            z-index: 0;
+            margin-bottom: 14px;
+            font-weight: 500;
+            font-size: x-large;
+        }
+
+        &-logout {
+            align-items: center;
+            font-weight: 500;
+            font-size: small;
+            align-self: self-end;
+
+            &-btn {
+                width: 45px;
+                padding: 2px;
+            }
+        }
+
+        &-btn {
+            grid-column: 1 span;
+            display: flex;
+            justify-content: center;
+
+            @media screen and (min-width: 576px) {
+                grid-column: 2 span;
+            }
+
+            @media screen and (min-width: 992px) {
+                grid-column: 3 span;
+            }
+
+            &-more {
+                text-align: center;
+                width: 50px;
+            }
+        }
+    }
+}
+
+.error {
+    height: 20px;
+    align-self: center;
+    font-weight: 500;
+    font-size: larger;
+    color: red;
+}

@@ -1,0 +1,12 @@
+.modal {
+    background-color: rgb(41, 41, 41);
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    width: 20%;
+
+    @media screen and (min-width: 992px) {
+        width: 10%;
+    }
+}

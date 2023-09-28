@@ -1,0 +1,12 @@
+.plus {
+    width: 60px;
+    height: 60px;
+}
+
+.cross {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transform: rotate(45deg);
+    align-self: self-end;
+}

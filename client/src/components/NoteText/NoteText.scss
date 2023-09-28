@@ -1,0 +1,14 @@
+.text {
+    font-weight: 500;
+    font-size: small;
+
+    @media screen and (min-width: 576px) {
+        font-weight: 500;
+        font-size: medium;
+    }
+
+    @media screen and (min-width: 992px) {
+        font-weight: 500;
+        font-size: larger;
+    }
+}

@@ -1,0 +1,90 @@
+.layout {
+    width: 100%;
+    height: auto;
+    font-family: 'Handjet', cursive;
+    background-color: rgb(31, 31, 31);
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+
+    &-info {
+        position: fixed;
+        display: flex;
+        width: 50%;
+        margin: 0 auto;
+
+        font-weight: 500;
+        font-size: small;
+
+        @media screen and (min-width: 576px) {
+            width: 50%;
+            margin: 0 auto;
+            font-weight: 500;
+            font-size: medium;
+        }
+
+        @media screen and (min-width: 992px) {
+            width: auto;
+            flex-direction: column;
+            justify-content: end;
+            right: 0;
+            font-weight: 500;
+            font-size: larger;
+        }
+
+        // p {
+        //     width: 33%;
+
+        //     @media screen and (min-width: 992px) {
+        //         width: 100%;
+        //     }
+        // }
+
+        button {
+            padding: 2px;
+            width: 50%;
+
+            @media screen and (min-width: 992px) {
+                width: 100%;
+            }
+        }
+
+        input {
+            display: flex;
+            align-self: self-end;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1),
+                0 2px 4px -2px rgb(0 0 0 / 0.1);
+            transition: 0.15s;
+            cursor: pointer;
+
+            &:hover {
+                background-color: rgb(43, 43, 43);
+                translate: 0 -2px;
+            }
+            width: 50%;
+
+            @media screen and (min-width: 992px) {
+                width: 100%;
+            }
+        }
+    }
+}
+
+.container {
+    display: flex;
+    padding-top: 30px;
+    padding-bottom: 30px;
+    width: 95%;
+    height: auto;
+
+    @media screen and (min-width: 576px) {
+        width: 85%;
+    }
+
+    @media screen and (min-width: 992px) {
+        width: 70%;
+    }
+}
