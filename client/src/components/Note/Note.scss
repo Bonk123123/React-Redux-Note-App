@@ -41,16 +41,11 @@
         height: 50%;
 
         &-name {
+            overflow-wrap: anywhere;
             margin-top: 12px;
             font-size: 20px;
             font-weight: 500;
             height: 50%;
-        }
-
-        &-describe {
-            font-size: 14px;
-            font-weight: 500;
-            height: auto;
         }
     }
 }

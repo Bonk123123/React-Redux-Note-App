@@ -4,7 +4,7 @@ import './svg.scss';
 const TemporarilyStopped = () => {
     return (
         <svg
-            className="img"
+            className="imgSVG"
             fill="#ffffff"
             version="1.1"
             id="Layer_1"

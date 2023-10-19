@@ -9,7 +9,6 @@ import ErrorPage from './pages/ErrorPage/ErrorPage';
 import NotePage from './pages/NotePage/NotePage';
 import Layout from './Layout/Layout';
 import LoginPage from './pages/LoginPage/LoginPage';
-import NewNotePage from './pages/NewNotePage/NewNotePage';
 import { Provider } from 'react-redux';
 
 const router = createBrowserRouter([
@@ -25,10 +24,6 @@ const router = createBrowserRouter([
             {
                 path: '/note/:note_id',
                 element: <NotePage />,
-            },
-            {
-                path: '/note',
-                element: <NewNotePage />,
             },
             {
                 path: '/login',

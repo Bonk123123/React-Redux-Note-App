@@ -9,25 +9,24 @@ import { status } from '../../models/Status';
 
 interface props {
     cardName: string;
-    describe: string;
     status: status;
     lastChange: Date;
+    id: string;
 }
 
-const Note: FC<props> = ({ cardName, describe, status, lastChange }) => {
+const Note: FC<props> = ({ cardName, status, lastChange, id }) => {
     return (
-        <Link to={'/note/id'} className="card">
+        <Link to={`/note/${id}`} className="card">
             <div className="card-up">
                 {status === 'in progress' && <InProgress />}
                 {status === 'temporarily stopped' && <TemporarilyStopped />}
                 {status === 'completed' && <Complete />}
                 <p className="card-up-date">
-                    Last change: <br /> {lastChange.toDateString()}
+                    Last update: <br /> {new Date(lastChange).toUTCString()}
                 </p>
             </div>
             <div className="card-down">
                 <p className="card-down-name">{cardName}</p>
-                <p className="card-down-describe">{describe}</p>
             </div>
         </Link>
     );

@@ -2,7 +2,7 @@ import React, { FC } from 'react';
 import './CreateTable.scss';
 import Btn from '../Btn/Btn';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { updateItem } from '../../redux/noteActSlice/noteActSlice';
+import { updateItem } from '../../redux/noteContentSlice/noteContentSlice';
 import { IContent } from '../../models/NoteContent';
 
 interface props {
@@ -12,7 +12,7 @@ interface props {
 
 const CreateTable: FC<props> = ({ i, item }) => {
     const dispatch = useAppDispatch();
-    const { content } = useAppSelector((state) => state.noteAct.note[i]);
+    const { content } = useAppSelector((state) => state.noteContent.note[i]);
 
     React.useEffect(() => {
         if (item) {

@@ -109,8 +109,12 @@
 }
 
 .error {
+    z-index: 1;
+    width: 100%;
+    text-align: center;
     height: 20px;
-    align-self: center;
+    align-self: self-center;
+    justify-self: self-center;
     font-weight: 500;
     font-size: larger;
     color: red;

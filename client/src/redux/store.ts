@@ -2,15 +2,17 @@ import { configureStore } from '@reduxjs/toolkit';
 import canvasSlice from './canvasSlice/canvasSlice';
 import noteSlice from './noteSlice/noteSlice';
 import userSlice from './userSlice/userSlice';
-import noteActSlice from './noteActSlice/noteActSlice';
+import noteContentSlice from './noteContentSlice/noteContentSlice';
+import notesSlice from './notesSlice/notesSlice';
 // ...
 
 export const store = configureStore({
     reducer: {
         canvas: canvasSlice,
         note: noteSlice,
+        notes: notesSlice,
         user: userSlice,
-        noteAct: noteActSlice,
+        noteContent: noteContentSlice,
     },
 
     middleware: (getDefaultMiddleware) =>

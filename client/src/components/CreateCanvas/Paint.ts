@@ -49,22 +49,32 @@ export default class Paint {
     }
 
     save() {
-        const dataURLtoBlob = (dataURL: string | undefined) => {
-            if (!dataURL) return;
-            let array, binary, i, len;
-            binary = atob(dataURL.split(',')[1]);
-            array = [];
-            i = 0;
-            len = binary.length;
-            while (i < len) {
-                array.push(binary.charCodeAt(i));
-                i++;
-            }
-            return new Blob([new Uint8Array(array)], {
-                type: 'image/png',
-            });
-        };
-        return dataURLtoBlob(this.canvas?.toDataURL('image/png'));
+        var dataUrl = this.canvas?.toDataURL('image/jpeg');
+        if (!dataUrl) return;
+        var bytes =
+            dataUrl.split(',')[0].indexOf('base64') >= 0
+                ? atob(dataUrl.split(',')[1])
+                : (<any>window).unescape(dataUrl.split(',')[1]);
+        var mime = dataUrl.split(',')[0].split(':')[1].split(';')[0];
+        var max = bytes.length;
+        var ia = new Uint8Array(max);
+        for (var i = 0; i < max; i++) {
+            ia[i] = bytes.charCodeAt(i);
+        }
+
+        var newImageFileFromCanvas = new File([ia], 'fileName.jpg', {
+            type: mime,
+        });
+
+        return newImageFileFromCanvas;
+
+        // const dataBlob = await new Promise<Blob | null>((resolve) =>
+        //     this.canvas?.toBlob((blob) => resolve(blob), 'image/png')
+        // );
+        // if (!dataBlob) return;
+        // let file: File = new File([dataBlob], 'file.png');
+        // console.log(file);
+        // return file;
     }
 
     clear() {

@@ -6,13 +6,13 @@ interface props {
     item: IContent;
 }
 
-const NoteImage: FC<props> = ({ item }) => {
+const NoteImage: FC<props> = ({ item }: any) => {
     return (
         <img
             className="img"
             key={item.type}
-            src={typeof item.content === 'string' ? item.content : ''}
-            alt=""
+            src={item.content}
+            alt={item.content}
         />
     );
 };

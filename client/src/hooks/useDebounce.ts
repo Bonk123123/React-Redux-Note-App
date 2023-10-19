@@ -14,7 +14,7 @@ const useDebounce = (callback: CallableFunction, time: number) => {
         };
 
         return debounce(func, time);
-    }, [time]);
+    }, []);
 
     return debounceCallback;
 };

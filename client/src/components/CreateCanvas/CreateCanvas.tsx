@@ -4,7 +4,7 @@ import './CreateCanvas.scss';
 import Inp from '../Inp/Inp';
 import Btn from '../Btn/Btn';
 import { useAppDispatch } from '../../hooks/reduxHooks';
-import { updateItem } from '../../redux/noteActSlice/noteActSlice';
+import { updateItem } from '../../redux/noteContentSlice/noteContentSlice';
 import { IContent } from '../../models/NoteContent';
 
 const paint = new Paint();
@@ -51,7 +51,7 @@ const CreateCanvas: FC<props> = ({ i, createIsClicked, item }) => {
                 j: i,
                 content: {
                     type: 'canvas',
-                    content: paint.save() as File,
+                    content: paint.save() as any,
                 },
             })
         );

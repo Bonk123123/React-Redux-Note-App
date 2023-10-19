@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { RootState } from '../store';
 import axios from 'axios';
+import { getCookie } from '../../utils/getCookie';
 
 interface ILogin {
     user_name: string;
@@ -10,7 +11,7 @@ interface ILogin {
 interface IUser {
     user_id: string;
     user_name: string;
-    accessToken: string;
+    access_token: string;
 }
 
 interface IUserState {
@@ -22,52 +23,44 @@ interface IUserState {
 export const fetchLogin = createAsyncThunk(
     'user/login',
     async (data: ILogin, { rejectWithValue }) => {
-        try {
-            await axios
-                .post<IUser>('http://localhost:8080/auth/signin', data)
-                .then((response) => {
-                    if (response.data.accessToken) {
-                        // localStorage.setItem(
-                        //     'user',
-                        //     JSON.stringify(response.data)
-                        // );
-                        document.cookie =
-                            encodeURIComponent('user') +
-                            '=' +
-                            encodeURIComponent(JSON.stringify(response.data));
-                    }
+        await axios
+            .post<IUser>('http://localhost:5001/auth/login', data)
+            .then((response) => {
+                if (response.data.access_token) {
+                    const date = new Date(Date.now() + 3600);
+                    document.cookie =
+                        encodeURIComponent('user') +
+                        '=' +
+                        encodeURIComponent(JSON.stringify(response.data)) +
+                        '; expires=' +
+                        date;
+                }
 
-                    return response.data;
-                });
-        } catch (e) {
-            return rejectWithValue(e);
-        }
+                return response.data;
+            })
+            .catch((error) => rejectWithValue(error.response.data.message));
     }
 );
 
 export const fetchRegister = createAsyncThunk(
     'user/register',
     async (data: ILogin, { rejectWithValue }) => {
-        try {
-            await axios
-                .post<IUser>('http://localhost:8080/auth/signup', data)
-                .then((response) => {
-                    if (response.data.accessToken) {
-                        // localStorage.setItem(
-                        //     'user',
-                        //     JSON.stringify(response.data)
-                        // );
-                        document.cookie =
-                            encodeURIComponent('user') +
-                            '=' +
-                            encodeURIComponent(JSON.stringify(response.data));
-                    }
+        await axios
+            .post<IUser>('http://localhost:5001/auth/registration', data)
+            .then((response) => {
+                if (response.data.access_token) {
+                    const date = new Date(Date.now() + 3600);
+                    document.cookie =
+                        encodeURIComponent('user') +
+                        '=' +
+                        encodeURIComponent(JSON.stringify(response.data)) +
+                        '; expires=' +
+                        date;
+                }
 
-                    return response.data;
-                });
-        } catch (e) {
-            return rejectWithValue(e);
-        }
+                return response.data;
+            })
+            .catch((error) => rejectWithValue(error.response.data.message));
     }
 );
 
@@ -98,24 +91,28 @@ export const userSlice = createSlice({
             state.isLoading = true;
         });
         builder.addCase(fetchLogin.fulfilled, (state) => {
-            state.isLoggedIn = true;
+            if (getCookie('user')) state.isLoggedIn = true;
             state.isLoading = false;
         });
         builder.addCase(fetchLogin.rejected, (state, action) => {
-            state.message = action.error.message;
+            state.message =
+                typeof action.payload === 'string' ? action.payload : '';
             state.isLoading = false;
+            state.isLoggedIn = false;
         });
 
         builder.addCase(fetchRegister.pending, (state) => {
             state.isLoading = true;
         });
         builder.addCase(fetchRegister.fulfilled, (state) => {
-            state.isLoggedIn = true;
+            if (getCookie('user')) state.isLoggedIn = true;
             state.isLoading = false;
         });
         builder.addCase(fetchRegister.rejected, (state, action) => {
-            state.message = action.error.message;
+            state.message =
+                typeof action.payload === 'string' ? action.payload : '';
             state.isLoading = false;
+            state.isLoggedIn = false;
         });
     },
 });

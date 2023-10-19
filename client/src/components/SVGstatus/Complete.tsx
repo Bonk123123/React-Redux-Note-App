@@ -4,7 +4,7 @@ import './svg.scss';
 const Complete = () => {
     return (
         <svg
-            className="img"
+            className="imgSVG"
             fill="#ffffff"
             height="800px"
             width="800px"

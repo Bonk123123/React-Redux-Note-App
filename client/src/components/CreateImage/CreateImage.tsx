@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import './CreateImage.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { updateItem } from '../../redux/noteActSlice/noteActSlice';
+import { updateItem } from '../../redux/noteContentSlice/noteContentSlice';
 import { IContent } from '../../models/NoteContent';
 
 interface props {
@@ -11,7 +11,7 @@ interface props {
 
 const CreateImage: FC<props> = ({ i, item }) => {
     const dispatch = useAppDispatch();
-    const { content } = useAppSelector((state) => state.noteAct.note[i]);
+    const { content } = useAppSelector((state) => state.noteContent.note[i]);
 
     const inpRef = React.useRef<HTMLInputElement>(null);
 
@@ -55,15 +55,13 @@ const CreateImage: FC<props> = ({ i, item }) => {
         overrideEventDefaults(e);
         if (e.target.files)
             dispatch(
-                dispatch(
-                    updateItem({
-                        j: i,
-                        content: {
-                            type: 'image',
-                            content: e.target.files[0],
-                        },
-                    })
-                )
+                updateItem({
+                    j: i,
+                    content: {
+                        type: 'image',
+                        content: e.target.files[0],
+                    },
+                })
             );
     };
 

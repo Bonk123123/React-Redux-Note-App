@@ -1,6 +1,6 @@
 import React from 'react';
 import './NotePage.scss';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Btn from '../../components/Btn/Btn';
 import NoteTable from '../../components/NoteTable/NoteTable';
 import NoteText from '../../components/NoteText/NoteText';
@@ -14,59 +14,60 @@ import CreateText from '../../components/CreateText/CreateText';
 import CreateTable from '../../components/CreateTable/CreateTable';
 import CreateCanvas from '../../components/CreateCanvas/CreateCanvas';
 import {
-    setNoteName,
-    fetchOneNote,
-    fetchUpdateNote,
+    fetchNoteContent,
     pushItem,
-} from '../../redux/noteActSlice/noteActSlice';
+    fetchNewNoteContent,
+    deleteItem,
+} from '../../redux/noteContentSlice/noteContentSlice';
 import Loading from '../../components/Loading/Loading';
-
-// let array: IContent[] = [
-//     {
-//         type: 'text',
-//         content: 'cnjdkejc cnjdmd fdj j j ejjejjjej nll qn lfwqef j',
-//     },
-//     {
-//         type: 'text',
-//         content: 'привет меня зовут артур и я тут всё это сделал',
-//     },
-//     {
-//         type: 'image',
-//         content:
-//             'https://api.360tv.ru/get_resized/DACzaD29NbA2Heg6c-EBkcB5wqlpygNFQzOndFMRmNI/rs:fill-down:1920:1080/g:fp:0.5:0.5/aHR0cHM6Ly8yNTc4MjQuc2VsY2RuLnJ1L2JhYnlsb24tbWVkaWEvYXJ0aWNsZXMvaW1hZ2UvMjAyMy80L2EwZTlmODYxLWZhMDEtNDZjZS04MDMyLTQxNzc0ODVkMjMxMi5qcGc.webp',
-//     },
-//     { type: 'line', content: 'line' },
-//     {
-//         type: 'table',
-//         content: [
-//             ['1', '2', '3', '4'],
-//             ['aaa', 'bbb', 'ccc', 'ddd'],
-//         ],
-//     },
-// ];
+import { getCookie } from '../../utils/getCookie';
+import { status } from '../../models/Status';
+import {
+    fetchChangeNoteName,
+    fetchNote,
+    setId,
+    setNoteName,
+} from '../../redux/noteSlice/noteSlice';
 
 const NotePage = () => {
+    const navigate = useNavigate();
     const { note_id } = useParams();
+    const [status, setStatus] = React.useState<status>('in progress');
+    const [userId, setUserId] = React.useState('');
+
     const [editMode, setEditMode] = React.useState(false);
 
     const [updateIsClicked, setUpdateIsClicked] = React.useState(false);
 
     const [modal, setModal] = React.useState({ x: 0, y: 0, visible: false });
 
-    const { note, note_name, isLoading, message } = useAppSelector(
-        (state) => state.noteAct
-    );
+    const { note, isLoading } = useAppSelector((state) => state.noteContent);
+    const { note_name } = useAppSelector((state) => state.note.note);
+
+    const { message } = useAppSelector((state) => state.note);
+
     const dispatch = useAppDispatch();
 
     React.useEffect(() => {
-        dispatch(fetchOneNote(note_id ? note_id : ''));
+        const user = JSON.parse(JSON.stringify(getCookie('user')));
+        if (!user) navigate('/login');
+        setUserId(user.user_id);
+        if (note_id) {
+            dispatch(fetchNote(note_id));
+            dispatch(fetchNoteContent(note_id ? note_id : ''));
+        }
     }, [dispatch, note_id]);
 
     const updateNote = async () => {
+        handleOnEdit();
         if (!note_id) return;
-        dispatch(fetchUpdateNote({ note, note_id, note_name }));
-        setUpdateIsClicked(false);
-        dispatch(fetchOneNote(note_id ? note_id : ''));
+        await dispatch(fetchChangeNoteName({ note_id, note_name }));
+        await dispatch(fetchNewNoteContent({ content: note, note_id }));
+        dispatch(fetchNoteContent(note_id));
+    };
+
+    const handleDeleteContent = (id: number) => {
+        dispatch(deleteItem(id));
     };
 
     const handleAddContent = (content: IContentTypes) => {
@@ -78,7 +79,6 @@ const NotePage = () => {
         setEditMode((prev) => !prev);
     };
 
-    if (isLoading) return <Loading />;
     if (message) return <p className="error">{message}</p>;
 
     return (
@@ -93,7 +93,11 @@ const NotePage = () => {
 
             <div className="note-name">
                 <div className="note-name-nav">
-                    <Link className="note-name-nav-home" to={'/'}>
+                    <Link
+                        className="note-name-nav-home"
+                        onClick={() => dispatch(setId(''))}
+                        to={'/'}
+                    >
                         <Btn className="note-name-nav-home-btn" name="<" />
                     </Link>
                     <Link className="note-name-nav-logout" to={'/login'}>
@@ -123,7 +127,14 @@ const NotePage = () => {
                         case 'image':
                             return (
                                 <>
-                                    {editMode && <Plus view="x" />}
+                                    {editMode && (
+                                        <Plus
+                                            view="x"
+                                            onClickFunction={() =>
+                                                handleDeleteContent(i)
+                                            }
+                                        />
+                                    )}
                                     {editMode ? (
                                         <CreateImage i={i} item={item} />
                                     ) : (
@@ -135,7 +146,14 @@ const NotePage = () => {
                         case 'text':
                             return (
                                 <>
-                                    {editMode && <Plus view="x" />}
+                                    {editMode && (
+                                        <Plus
+                                            view="x"
+                                            onClickFunction={() =>
+                                                handleDeleteContent(i)
+                                            }
+                                        />
+                                    )}
                                     {editMode ? (
                                         <CreateText i={i} item={item} />
                                     ) : (
@@ -147,7 +165,14 @@ const NotePage = () => {
                         case 'table':
                             return (
                                 <>
-                                    {editMode && <Plus view="x" />}
+                                    {editMode && (
+                                        <Plus
+                                            view="x"
+                                            onClickFunction={() =>
+                                                handleDeleteContent(i)
+                                            }
+                                        />
+                                    )}
                                     {editMode ? (
                                         <CreateTable i={i} item={item} />
                                     ) : (
@@ -159,7 +184,14 @@ const NotePage = () => {
                         case 'canvas':
                             return (
                                 <>
-                                    {editMode && <Plus view="x" />}
+                                    {editMode && (
+                                        <Plus
+                                            view="x"
+                                            onClickFunction={() =>
+                                                handleDeleteContent(i)
+                                            }
+                                        />
+                                    )}
                                     <CreateCanvas
                                         i={i}
                                         createIsClicked={updateIsClicked}
@@ -170,7 +202,14 @@ const NotePage = () => {
                         case 'line':
                             return (
                                 <>
-                                    {editMode && <Plus view="x" />}
+                                    {editMode && (
+                                        <Plus
+                                            view="x"
+                                            onClickFunction={() =>
+                                                handleDeleteContent(i)
+                                            }
+                                        />
+                                    )}
                                     <span
                                         key={item.type}
                                         className="line"
@@ -181,6 +220,7 @@ const NotePage = () => {
                             return <></>;
                     }
                 })}
+
                 {editMode && (
                     <Btn
                         option={{
@@ -214,6 +254,8 @@ const NotePage = () => {
                 {!editMode && (
                     <Btn name="edit" option={{ onClick: handleOnEdit }} />
                 )}
+
+                {isLoading && <Loading />}
             </div>
         </div>
     );

@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import './CreateText.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxHooks';
-import { updateItem } from '../../redux/noteActSlice/noteActSlice';
+import { updateItem } from '../../redux/noteContentSlice/noteContentSlice';
 import { IContent } from '../../models/NoteContent';
 
 interface props {
@@ -10,7 +10,7 @@ interface props {
 }
 
 const CreateText: FC<props> = ({ i, item }) => {
-    const { content } = useAppSelector((state) => state.noteAct.note[i]);
+    const { content } = useAppSelector((state) => state.noteContent.note[i]);
     const dispatch = useAppDispatch();
 
     React.useEffect(() => {
